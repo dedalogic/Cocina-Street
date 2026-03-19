@@ -48,7 +48,7 @@
       --radius-sm: 10px;
       --shadow: 0 2px 12px rgba(0,0,0,0.08);
       --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-      --nav-h: 64px;
+      --nav-h: 72px;
       --font: 'Nunito', sans-serif;
     }
 
@@ -355,10 +355,10 @@
       background: #0f2a38;
       border-top: none;
       display: flex;
-      height: 64px;
+      height: 72px;
       z-index: 100;
       box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
-      padding: 0 4px;
+      padding: 0 4px 6px;
       flex-shrink: 0;
     }
 
@@ -1236,13 +1236,11 @@ function updateCardStyle(id) {
   const estado = getEstado(id);
   if (estado === 'urgente') {
     card.classList.add('estado-urgente');
-    badge.className = 'product-badge badge-urgente';
-    badge.textContent = '⚠️ Urgente';
   } else if (estado === 'bajo') {
     card.classList.add('estado-bajo');
-    badge.className = 'product-badge badge-bajo';
-    badge.textContent = '🟡 Stock bajo';
   }
+  badge.className = 'product-badge badge-hidden';
+  badge.textContent = '';
 }
 
 const STICKY_NAMES = {
