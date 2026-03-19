@@ -58,19 +58,20 @@
       font-family: var(--font);
       background: var(--gris-claro);
       color: var(--negro);
-      min-height: 100dvh;
+      height: 100dvh;
       max-width: 480px;
       margin: 0 auto;
       position: relative;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     /* ─── SCREENS ─── */
     .screen {
       display: none;
-      min-height: 100dvh;
+      height: 100dvh;
       flex-direction: column;
       animation: fadeIn 0.25s ease;
+      overflow: hidden;
     }
     .screen.active { display: flex; }
 
@@ -86,6 +87,7 @@
       justify-content: center;
       gap: 32px;
       padding: 40px 24px;
+      overflow: hidden;
     }
 
     .welcome-logo {
@@ -295,12 +297,14 @@
       flex-direction: column;
       overflow: hidden;
       height: 100dvh;
+      position: relative;
     }
 
-    #screen-conteo .scrollable {
+    #screen-conteo > .scrollable {
       flex: 1;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
 
     .btn-finalizar {
@@ -403,7 +407,7 @@
     /* PRODUCT SECTION */
     .seccion-content {
       display: none;
-      padding: 16px;
+      padding: 12px 16px 16px;
       flex-direction: column;
       gap: 10px;
     }
@@ -841,22 +845,16 @@
   <!-- Secciones -->
   <div class="scrollable" style="padding-bottom:8px;">
     <div class="seccion-content active" id="sec-carnes">
-      <div class="seccion-title">🥩 Carnes y Proteínas</div>
     </div>
     <div class="seccion-content" id="sec-verduras">
-      <div class="seccion-title">🥬 Verduras y Frescos</div>
     </div>
     <div class="seccion-content" id="sec-lacteos">
-      <div class="seccion-title">🧀 Lácteos y Fríos</div>
     </div>
     <div class="seccion-content" id="sec-abarrotes">
-      <div class="seccion-title">🍟 Abarrotes y Pan</div>
     </div>
     <div class="seccion-content" id="sec-pan">
-      <div class="seccion-title">🍞 Pan</div>
     </div>
     <div class="seccion-content" id="sec-limpieza">
-      <div class="seccion-title">🧴 Limpieza e Insumos</div>
     </div>
   </div>
 
@@ -1122,8 +1120,7 @@ function renderSecciones() {
   const data = getAppData();
   SECCION_ORDER.forEach((sec, idx) => {
     const container = document.getElementById(SECCION_MAP[sec]);
-    const titulo = container.querySelector('.seccion-title').outerHTML;
-    container.innerHTML = titulo;
+    container.innerHTML = '';
 
     data.productos[sec].forEach(nombre => {
       const id = slugify(nombre);
