@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Cocina Street</title>
+  <!-- PWA Manifest inline -->
+  <link rel="manifest" href="data:application/json,{%22name%22:%22Cocina%20Street%22,%22short_name%22:%22Cocina%20Street%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%235BC4E0%22,%22theme_color%22:%22%235BC4E0%22,%22icons%22:[{%22src%22:%22icon.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}">
+
+  <link rel="manifest" href="manifest.json">
   <!-- Ícono app -->
   <link rel="icon" type="image/png" href="icon.png">
   <link rel="apple-touch-icon" href="icon.png">
@@ -1296,7 +1300,17 @@ function buildResumen() {
 function enviarWhatsApp() {
   const msg = document.getElementById('preview-msg').textContent;
   const encoded = encodeURIComponent(msg);
-  window.open(`https://wa.me/?text=${encoded}`, '_blank');
+  // Intenta abrir app nativa primero, fallback a web
+  const waApp = `whatsapp://send?text=${encoded}`;
+  const waWeb = `https://api.whatsapp.com/send?text=${encoded}`;
+  
+  // En móvil abre la app directamente
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    window.location.href = waApp;
+  } else {
+    window.open(waWeb, '_blank');
+  }
   // Limpiar conteo después de enviar
   setTimeout(() => {
     if(confirm('¿Limpiar el conteo para el próximo turno?')) {
