@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cocina Street</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── VARIABLES ─── */
+    :root {
+      --celeste: #5BC4E0;
+      --celeste-dark: #2AAACF;
+      --celeste-light: #E0F6FC;
+      --rosado: #F06292;
+      --rosado-dark: #E91E7A;
+      --rosado-light: #FCE4EC;
+      --blanco: #FFFFFF;
+      --negro: #111827;
+      --gris: #6B7280;
+      --gris-claro: #F3F4F6;
+      --gris-borde: #E5E7EB;
+
+      --ok: #D1FAE5;
+      --ok-text: #065F46;
+      --ok-dot: #10B981;
+      --bajo: #FEF3C7;
+      --bajo-text: #92400E;
+      --bajo-dot: #F59E0B;
+      --critico: #FFE4E6;
+      --critico-text: #9F1239;
+      --critico-dot: #F43F5E;
+      --urgente: #F43F5E;
+
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+      --nav-h: 64px;
+      --font: 'Nunito', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: var(--font);
+      background: var(--gris-claro);
+      color: var(--negro);
+      min-height: 100dvh;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCREENS ─── */
+    .screen {
+      display: none;
+      min-height: 100dvh;
+      flex-direction: column;
+      animation: fadeIn 0.25s ease;
+    }
+    .screen.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SCREEN: WELCOME ─── */
+    #screen-welcome {
+      background: var(--celeste);
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      padding: 40px 24px;
+    }
+
+    .welcome-logo {
+      width: 96px; height: 96px;
+      background: white;
+      border-radius: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+
+    .welcome-text {
+      text-align: center;
+    }
+    .welcome-text h1 {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: white;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+    .welcome-text p {
+      font-size: 15px;
+      margin-top: 8px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-primary {
+      background: white;
+      color: var(--celeste-dark);
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 18px;
+      font-weight: 800;
+      padding: 18px 48px;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      transition: transform 0.12s, box-shadow 0.12s;
+      width: 100%;
+      max-width: 280px;
+    }
+    .btn-primary:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+
+    /* ─── SCREEN: USUARIO ─── */
+    #screen-usuario {
+      background: var(--blanco);
+    }
+
+    .screen-header {
+      padding: 24px 20px 16px;
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-borde);
+    }
+    .screen-header h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--negro);
+    }
+    .screen-header p {
+      font-size: 14px;
+      color: var(--gris);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .users-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .user-btn {
+      background: var(--gris-claro);
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radius);
+      padding: 20px 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s;
+      font-family: var(--font);
+    }
+    .user-btn:active { transform: scale(0.96); }
+    .user-btn.selected {
+      background: var(--celeste-light);
+      border-color: var(--celeste);
+    }
+
+    .user-avatar {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      background: linear-gradient(135deg, var(--celeste), var(--rosado));
+      color: white;
+      font-weight: 800;
+      font-size: 22px;
+    }
+
+    .user-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--negro);
+      text-align: center;
+    }
+
+    /* ─── SCREEN: CONTEXTO ─── */
+    #screen-contexto {
+      background: var(--blanco);
+    }
+
+    .contexto-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      flex: 1;
+    }
+
+    .ctx-section h3 {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+
+    .turno-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .turno-btn {
+      background: var(--gris-claro);
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radius);
+      padding: 18px 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font);
+      transition: all 0.15s;
+    }
+    .turno-btn:active { transform: scale(0.95); }
+    .turno-am.selected {
+      background: var(--celeste-light);
+      border-color: var(--celeste-dark);
+    }
+    .turno-pm.selected {
+      background: var(--rosado-light);
+      border-color: var(--rosado-dark);
+    }
+    .turno-btn .icon { font-size: 28px; }
+    .turno-btn .label { font-size: 13px; font-weight: 700; color: var(--negro); }
+
+    .dia-info {
+      background: var(--gris-claro);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .dia-info .dia-icon { font-size: 28px; }
+    .dia-info .dia-text { font-size: 16px; font-weight: 700; color: var(--negro); }
+    .dia-info .dia-sub { font-size: 13px; color: var(--gris); font-weight: 600; }
+
+    .btn-continuar {
+      background: linear-gradient(135deg, var(--celeste-dark), var(--celeste));
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 18px;
+      font-weight: 800;
+      padding: 20px;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.12s, opacity 0.12s;
+      margin-top: auto;
+    }
+    .btn-continuar:active { transform: scale(0.98); }
+    .btn-continuar:disabled { opacity: 0.4; pointer-events: none; }
+
+    /* ─── SCREEN: CONTEO ─── */
+    #screen-conteo {
+      background: var(--gris-claro);
+      padding-bottom: var(--nav-h);
+    }
+
+    .btn-finalizar {
+      display: none;
+    }
+
+    .btn-float-resumen {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 50;
+      background: #0f2a38;
+      color: rgba(255,255,255,0.85);
+      border: none;
+      border-radius: 20px;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .btn-float-resumen:active { transform: scale(0.96); opacity: 0.8; }
+
+    /* NAV TABS */
+    .nav-tabs {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      background: #0f2a38;
+      border-top: none;
+      display: flex;
+      height: 64px;
+      z-index: 100;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
+      padding: 0 4px;
+    }
+
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 8px 2px;
+      border: none;
+      background: none;
+      font-family: var(--font);
+      transition: all 0.15s;
+      position: relative;
+      border-radius: 12px;
+      margin: 6px 2px;
+    }
+
+    .nav-tab .tab-icon {
+      font-size: 28px;
+      transition: transform 0.15s;
+      filter: grayscale(0.4) brightness(0.7);
+      line-height: 1;
+    }
+    .nav-tab .tab-label { display: none; }
+
+    .nav-tab.active {
+      background: rgba(91,196,224,0.18);
+    }
+    .nav-tab.active .tab-icon {
+      transform: scale(1.2);
+      filter: grayscale(0) brightness(1);
+    }
+    .nav-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 2px; left: 25%; right: 25%;
+      height: 3px;
+      background: var(--celeste);
+      border-radius: 4px 4px 0 0;
+    }
+
+    /* PRODUCT SECTION */
+    .seccion-content {
+      display: none;
+      padding: 16px;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .seccion-content.active { display: flex; }
+
+    .seccion-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--negro);
+      padding: 4px 0 8px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      border: 2px solid transparent;
+      transition: all 0.25s ease;
+    }
+
+    .product-card.estado-ok { border-color: var(--ok-dot); background: var(--ok); }
+    .product-card.estado-bajo { border-color: var(--bajo-dot); background: var(--bajo); }
+    .product-card.estado-critico { border-color: var(--critico-dot); background: var(--critico); }
+    .product-card.estado-urgente { border-color: var(--urgente); background: #FFE4E6; }
+
+    .product-info { flex: 1; min-width: 0; }
+    .product-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--negro);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .product-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-top: 4px;
+      display: inline-block;
+    }
+    .badge-ok { background: var(--ok-dot); color: white; }
+    .badge-bajo { background: var(--bajo-dot); color: white; }
+    .badge-critico { background: var(--critico-dot); color: white; }
+    .badge-urgente { background: var(--urgente); color: white; }
+    .badge-hidden { display: none; }
+
+    .product-controls {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .ctrl-btn {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      border: none;
+      font-size: 22px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.1s, background 0.1s;
+      font-family: var(--font);
+    }
+    .ctrl-btn:active { transform: scale(0.88); }
+    .ctrl-minus { background: var(--gris-claro); color: var(--gris); }
+    .ctrl-minus:active { background: #E5E7EB; }
+    .ctrl-plus { background: var(--celeste); color: white; }
+    .ctrl-plus:active { background: var(--celeste-dark); }
+
+    .ctrl-input {
+      width: 52px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--negro);
+      font-family: var(--font);
+      border: 2px solid var(--gris-borde);
+      border-radius: 8px;
+      padding: 4px 2px;
+      background: white;
+      -moz-appearance: textfield;
+    }
+    .ctrl-input::-webkit-outer-spin-button,
+    .ctrl-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .ctrl-input:focus { outline: none; border-color: var(--celeste); }
+
+    .ctrl-count {
+      width: 48px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--negro);
+    }
+
+    .btn-urgente {
+      background: none;
+      border: 2px solid var(--gris-borde);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-left: 4px;
+    }
+    .btn-urgente.active {
+      background: var(--urgente);
+      border-color: var(--urgente);
+    }
+    .btn-urgente:active { transform: scale(0.9); }
+
+    /* ─── SCREEN: RESUMEN ─── */
+    #screen-resumen {
+      background: var(--gris-claro);
+    }
+
+    .resumen-header {
+      background: white;
+      padding: 20px;
+      border-bottom: 1px solid var(--gris-borde);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .btn-back {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: var(--gris-claro);
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .resumen-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+    }
+
+    .resumen-preview {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .resumen-preview h3 {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+    }
+
+    .preview-msg {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--negro);
+      white-space: pre-wrap;
+      background: var(--gris-claro);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .resumen-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 14px 10px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .stat-card .stat-num {
+      font-size: 28px;
+      font-weight: 900;
+    }
+    .stat-card .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+    .stat-card.critico .stat-num { color: var(--critico-dot); }
+    .stat-card.bajo .stat-num { color: var(--bajo-dot); }
+    .stat-card.urgente .stat-num { color: var(--urgente); }
+
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 20px;
+      font-weight: 800;
+      padding: 22px;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.12s;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    }
+    .btn-whatsapp:active { transform: scale(0.98); }
+
+    .empty-resumen {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gris);
+    }
+    .empty-resumen .empty-icon { font-size: 64px; margin-bottom: 16px; }
+    .empty-resumen p { font-size: 16px; font-weight: 600; }
+
+    /* ─── ADMIN ─── */
+    #screen-admin {
+      background: var(--blanco);
+    }
+    .admin-login {
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+      justify-content: center;
+    }
+    .admin-login h2 { font-size: 24px; font-weight: 900; }
+    .admin-login input {
+      border: 2px solid var(--gris-borde);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 600;
+      outline: none;
+      width: 100%;
+    }
+    .admin-login input:focus { border-color: var(--celeste); }
+    .admin-panel { padding: 16px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .admin-section-title {
+      font-size: 14px; font-weight: 800; color: var(--gris);
+      text-transform: uppercase; letter-spacing: 0.8px;
+    }
+
+    .admin-product-row {
+      background: white; border-radius: var(--radius-sm);
+      padding: 14px 16px; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px;
+      box-shadow: var(--shadow); border: 1px solid var(--gris-borde);
+    }
+    .admin-product-row span { font-size: 15px; font-weight: 700; }
+    .btn-del {
+      background: var(--critico); border: none; border-radius: 8px;
+      width: 36px; height: 36px; cursor: pointer; font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .admin-add-row {
+      display: flex; gap: 10px; margin-top: 4px;
+    }
+    .admin-add-row input {
+      flex: 1; border: 2px solid var(--gris-borde); border-radius: var(--radius-sm);
+      padding: 14px; font-family: var(--font); font-size: 15px; font-weight: 600; outline: none;
+    }
+    .admin-add-row input:focus { border-color: var(--celeste); }
+    .admin-add-row select {
+      border: 2px solid var(--gris-borde); border-radius: var(--radius-sm);
+      padding: 14px 8px; font-family: var(--font); font-size: 14px; font-weight: 600;
+      outline: none; background: white; cursor: pointer;
+    }
+    .btn-add {
+      background: var(--celeste); color: white; border: none;
+      border-radius: var(--radius-sm); padding: 0 18px;
+      font-size: 22px; cursor: pointer; font-weight: 700;
+    }
+
+    .admin-users-grid { display: flex; flex-direction: column; gap: 8px; }
+    .admin-user-row {
+      background: white; border-radius: var(--radius-sm);
+      padding: 14px 16px; display: flex; align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow); border: 1px solid var(--gris-borde);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+      background: var(--negro); color: white;
+      padding: 12px 24px; border-radius: 30px;
+      font-size: 14px; font-weight: 700;
+      opacity: 0; transition: opacity 0.3s;
+      z-index: 200; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+
+    /* Botón siguiente sección */
+    .btn-next-sec {
+      background: #0f2a38;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 17px;
+      font-weight: 800;
+      color: white;
+      padding: 20px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    .btn-next-sec:active { transform: scale(0.98); background: #1a3a4a; }
+    .btn-next-final {
+      background: linear-gradient(135deg, var(--rosado-dark), var(--rosado));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 16px rgba(240,98,146,0.35);
+    }
+    .btn-next-final:active { background: linear-gradient(135deg, var(--rosado-dark), var(--rosado)); }
+
+    /* Scrollable areas */
+    .scrollable { overflow-y: auto; flex: 1; }
+
+    /* Admin link */
+    .admin-link {
+      position: fixed; bottom: 8px; right: 12px;
+      font-size: 11px; color: rgba(255,255,255,0.5);
+      cursor: pointer; font-weight: 600;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 1: WELCOME
+══════════════════════════════════════ -->
+<div class="screen active" id="screen-welcome">
+  <div class="welcome-logo">📋</div>
+  <div class="welcome-text">
+    <h1>Cocina Street</h1>
+    <p>Control de inventario de cocina</p>
+  </div>
+  <button class="btn-primary" onclick="goTo('screen-usuario')">Iniciar conteo</button>
+  <span class="admin-link" onclick="goTo('screen-admin')">Admin</span>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 2: USUARIO
+══════════════════════════════════════ -->
+<div class="screen" id="screen-usuario">
+  <div class="screen-header">
+    <h2>👋 ¿Quién hace el conteo?</h2>
+    <p>Toca tu nombre para continuar</p>
+  </div>
+  <div class="users-grid scrollable" id="users-grid">
+    <!-- generado por JS -->
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 3: CONTEXTO
+══════════════════════════════════════ -->
+<div class="screen" id="screen-contexto">
+  <div class="screen-header">
+    <h2>📋 Contexto del conteo</h2>
+    <p>Información del turno de hoy</p>
+  </div>
+  <div class="contexto-body scrollable">
+    <div class="ctx-section">
+      <h3>Turno</h3>
+      <div class="turno-grid">
+        <button class="turno-btn turno-am" data-turno="mañana" onclick="selectTurno(this)">
+          <span class="icon" style="font-size:26px;font-weight:900;color:var(--celeste-dark);">AM</span><span class="label">Mañana</span>
+        </button>
+        <button class="turno-btn turno-pm" data-turno="tarde" onclick="selectTurno(this)">
+          <span class="icon" style="font-size:26px;font-weight:900;color:var(--rosado-dark);">PM</span><span class="label">Tarde</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="ctx-section">
+      <h3>Día de hoy</h3>
+      <div class="dia-info" id="dia-info">
+        <span class="dia-icon" id="dia-icon">📅</span>
+        <div>
+          <div class="dia-text" id="dia-text">Cargando...</div>
+          <div class="dia-sub" id="dia-sub"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-continuar" id="btn-iniciar-conteo" disabled onclick="iniciarConteo()">
+      Comenzar conteo →
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 4: CONTEO
+══════════════════════════════════════ -->
+<div class="screen" id="screen-conteo">
+
+
+  <!-- Secciones -->
+  <div class="scrollable" style="padding-bottom:8px">
+    <div class="seccion-content active" id="sec-carnes">
+      <div class="seccion-title">🥩 Carnes y Proteínas</div>
+    </div>
+    <div class="seccion-content" id="sec-verduras">
+      <div class="seccion-title">🥬 Verduras y Frescos</div>
+    </div>
+    <div class="seccion-content" id="sec-lacteos">
+      <div class="seccion-title">🧀 Lácteos y Fríos</div>
+    </div>
+    <div class="seccion-content" id="sec-abarrotes">
+      <div class="seccion-title">🍟 Abarrotes y Pan</div>
+    </div>
+    <div class="seccion-content" id="sec-pan">
+      <div class="seccion-title">🍞 Pan</div>
+    </div>
+    <div class="seccion-content" id="sec-limpieza">
+      <div class="seccion-title">🧴 Limpieza e Insumos</div>
+    </div>
+  </div>
+
+  <!-- Botón flotante ver resumen -->
+  <button class="btn-float-resumen" onclick="goTo('screen-resumen'); buildResumen()">
+    Ver resumen →
+  </button>
+
+  <!-- Nav inferior -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab(this,'sec-carnes')">
+      <span class="tab-icon">🥩</span>
+      <span class="tab-label">Carnes</span>
+    </button>
+    <button class="nav-tab" onclick="switchTab(this,'sec-verduras')">
+      <span class="tab-icon">🥬</span>
+      <span class="tab-label">Verduras</span>
+    </button>
+    <button class="nav-tab" onclick="switchTab(this,'sec-lacteos')">
+      <span class="tab-icon">🧀</span>
+      <span class="tab-label">Lácteos</span>
+    </button>
+    <button class="nav-tab" onclick="switchTab(this,'sec-abarrotes')">
+      <span class="tab-icon">🍟</span>
+      <span class="tab-label">Abarrotes</span>
+    </button>
+    <button class="nav-tab" onclick="switchTab(this,'sec-pan')" style="display:none">
+      <span class="tab-icon">🍞</span>
+      <span class="tab-label">Pan</span>
+    </button>
+    <button class="nav-tab" onclick="switchTab(this,'sec-limpieza')">
+      <span class="tab-icon">🧴</span>
+      <span class="tab-label">Limpieza</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 5: RESUMEN
+══════════════════════════════════════ -->
+<div class="screen" id="screen-resumen">
+  <div class="resumen-header">
+    <button class="btn-back" onclick="goTo('screen-conteo')">←</button>
+    <h2 style="font-size:20px;font-weight:900;">Resumen del conteo</h2>
+  </div>
+  <div class="resumen-body scrollable">
+    <div class="resumen-stats">
+      <div class="stat-card urgente">
+        <div class="stat-num" id="stat-urgente">0</div>
+        <div class="stat-label">⚠️ Urgente</div>
+      </div>
+      <div class="stat-card critico">
+        <div class="stat-num" id="stat-critico">0</div>
+        <div class="stat-label">🔴 Crítico</div>
+      </div>
+      <div class="stat-card bajo">
+        <div class="stat-num" id="stat-bajo">0</div>
+        <div class="stat-label">🟡 Stock bajo</div>
+      </div>
+    </div>
+    <div class="resumen-preview">
+      <h3>Vista previa del mensaje</h3>
+      <div class="preview-msg" id="preview-msg"></div>
+    </div>
+    <button class="btn-whatsapp" onclick="enviarWhatsApp()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.121 1.532 5.849L.054 23.5l5.821-1.527A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.651-.507-5.173-1.392l-.371-.221-3.853 1.011 1.029-3.752-.242-.387A9.953 9.953 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Enviar por WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 6: ADMIN
+══════════════════════════════════════ -->
+<div class="screen" id="screen-admin">
+  <div id="admin-login-view">
+    <div class="screen-header">
+      <h2>🔒 Panel de administrador</h2>
+      <p>Ingresa la clave para continuar</p>
+    </div>
+    <div class="admin-login">
+      <input type="password" id="admin-pass-input" placeholder="Contraseña" />
+      <button class="btn-continuar" onclick="checkAdminPass()">Entrar</button>
+      <button class="btn-continuar" style="background:var(--gris-claro);color:var(--negro);" onclick="goTo('screen-welcome')">Volver</button>
+    </div>
+  </div>
+  <div id="admin-panel-view" style="display:none; flex-direction:column; flex:1;">
+    <div class="screen-header" style="display:flex;align-items:center;gap:12px;">
+      <button class="btn-back" onclick="goTo('screen-welcome')">←</button>
+      <div>
+        <h2>Panel Admin</h2>
+        <p>Gestiona productos y usuarios</p>
+      </div>
+    </div>
+    <div class="admin-panel scrollable">
+      <!-- Usuarios -->
+      <div class="admin-section-title">👥 Usuarios</div>
+      <div class="admin-add-row">
+        <input type="text" id="new-user-input" placeholder="Nombre del usuario" />
+        <button class="btn-add" onclick="addUser()">+</button>
+      </div>
+      <div class="admin-users-grid" id="admin-users-list"></div>
+
+      <!-- Productos -->
+      <div class="admin-section-title" style="margin-top:8px;">📦 Productos</div>
+      <div class="admin-add-row">
+        <input type="text" id="new-product-input" placeholder="Nombre del producto" />
+        <select id="new-product-section">
+          <option value="carnes">🥩 Carnes</option>
+          <option value="verduras">🥦 Verduras</option>
+          <option value="lacteos">🧀 Lácteos</option>
+          <option value="abarrotes">🫙 Abarrotes</option>
+          <option value="pan">🍞 Pan</option>
+          <option value="limpieza">🧴 Limpieza</option>
+        </select>
+        <button class="btn-add" onclick="addProduct()">+</button>
+      </div>
+      <div id="admin-products-list"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════
+const ADMIN_PASS = 'cocina2024';
+
+const DEFAULT_DATA = {
+  usuarios: ['Ayerim', 'Bettys', 'Carmen', 'Miriam', 'Roxedy', 'Otra'],
+  productos: {
+    carnes: ['Hamburguesas','Pechuga de pollo','Sobrecostilla','Lomo vetado','Lomo','Tocino','Grasa','Camarones','Huevo','Not Burger'],
+    verduras: ['Lechuga escarola','Lechuga orgánica','Tomate','Zanahoria','Repollo blanco','Repollo morado','Cebollín','Cebolla blanca','Cebolla morada','Palta','Rúcula','Champiñones','Limón','Pepinillo','Jalapeños'],
+    lacteos: ['Yogur','Leche','Queso cheddar','Queso barra','Queso parmesano','Queso crema','Queso azul'],
+    abarrotes: ['Papas fritas','Pan de hamburguesa','Empanadas','Panko','Mayonesa','Mostaza','Ketchup','BBQ','Salsa cheddar','Miel','Cebolla crispy','Cebolla en polvo','Harina','Jugo de limón','Sal','Pimienta','Pimienta cayena','Pimienta blanca','Pimienta negra','Pan de molde','Atún','Anchoas'],
+    pan: [],
+    limpieza: ['Desengrasante blanco','Desengrasante rosado','Lavaloza','Guantes S','Rinso','Papel antigrasa','Cajas delivery']
+  }
+};
+
+let state = {
+  usuario: null,
+  turno: null,
+  diaNombre: '',
+  esFinde: false,
+  conteo: {} // { productoId: { cantidad: 0, urgente: false } }
+};
+
+function getAppData() {
+  const saved = localStorage.getItem('ks_data');
+  return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+function saveAppData(data) {
+  localStorage.setItem('ks_data', JSON.stringify(data));
+}
+
+// Conteo persistente
+function getConteo() {
+  const saved = localStorage.getItem('ks_conteo');
+  return saved ? JSON.parse(saved) : {};
+}
+function saveConteo(c) {
+  localStorage.setItem('ks_conteo', JSON.stringify(c));
+}
+
+// ══════════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════════
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ══════════════════════════════════
+// WELCOME → USUARIO
+// ══════════════════════════════════
+function renderUsuarios() {
+  const data = getAppData();
+  const grid = document.getElementById('users-grid');
+  grid.innerHTML = '';
+  data.usuarios.forEach(u => {
+    const btn = document.createElement('button');
+    btn.className = 'user-btn';
+    btn.innerHTML = `
+      <div class="user-avatar">${u[0]}</div>
+      <span class="user-name">${u}</span>`;
+    btn.onclick = () => selectUsuario(u, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function selectUsuario(nombre, btn) {
+  document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.usuario = nombre;
+  setTimeout(() => goTo('screen-contexto'), 300);
+}
+
+// ══════════════════════════════════
+// CONTEXTO
+// ══════════════════════════════════
+function initContexto() {
+  const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const now = new Date();
+  const dia = dias[now.getDay()];
+  const fecha = `${now.getDate()} de ${meses[now.getMonth()]}`;
+  const esFinde = now.getDay() === 0 || now.getDay() === 5 || now.getDay() === 6;
+  
+  state.diaNombre = dia;
+  state.esFinde = esFinde;
+
+  document.getElementById('dia-icon').textContent = esFinde ? '🔥' : '📅';
+  document.getElementById('dia-text').textContent = `${dia}, ${fecha}`;
+  document.getElementById('dia-sub').textContent = esFinde ? 'Fin de semana — mayor flujo' : 'Día normal de semana';
+}
+
+function selectTurno(btn) {
+  document.querySelectorAll('.turno-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.turno = btn.dataset.turno;
+  document.getElementById('btn-iniciar-conteo').disabled = false;
+}
+
+function iniciarConteo() {
+  // header removed, nothing to update
+  
+  // Siempre conteo nuevo en 0
+  state.conteo = {};
+  saveConteo({});
+  
+  renderSecciones();
+  goTo('screen-conteo');
+}
+
+// ══════════════════════════════════
+// CONTEO — SECCIONES
+// ══════════════════════════════════
+const SECCION_MAP = {
+  carnes: 'sec-carnes',
+  verduras: 'sec-verduras',
+  lacteos: 'sec-lacteos',
+  abarrotes: 'sec-abarrotes',
+  pan: 'sec-pan',
+  limpieza: 'sec-limpieza'
+};
+
+const SECCION_ORDER = ['carnes','verduras','lacteos','abarrotes','limpieza'];
+const SECCION_LABELS = {
+  carnes:'🥩 Carnes', verduras:'🥬 Verduras', lacteos:'🧀 Lácteos',
+  abarrotes:'🍟 Abarrotes y Pan', limpieza:'🧴 Limpieza'
+};
+
+function switchTabByIndex(idx) {
+  const key = SECCION_ORDER[idx];
+  const navTabs = document.querySelectorAll('.nav-tab:not([style*="display:none"])');
+  navTabs.forEach(b => b.classList.remove('active'));
+  if (navTabs[idx]) navTabs[idx].classList.add('active');
+  document.querySelectorAll('.seccion-content').forEach(s => s.classList.remove('active'));
+  document.getElementById(SECCION_MAP[key]).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function renderSecciones() {
+  const data = getAppData();
+  SECCION_ORDER.forEach((sec, idx) => {
+    const container = document.getElementById(SECCION_MAP[sec]);
+    const titulo = container.querySelector('.seccion-title').outerHTML;
+    container.innerHTML = titulo;
+
+    data.productos[sec].forEach(nombre => {
+      const id = slugify(nombre);
+      if (!state.conteo[id]) state.conteo[id] = { cantidad: 0, urgente: false };
+      container.appendChild(createProductCard(nombre, id, sec));
+    });
+
+    // Botón siguiente sección
+    const isLast = idx === SECCION_ORDER.length - 1;
+    const btnNext = document.createElement('button');
+    if (!isLast) {
+      const nextLabel = SECCION_LABELS[SECCION_ORDER[idx + 1]];
+      btnNext.className = 'btn-next-sec';
+      btnNext.textContent = 'Siguiente: ' + nextLabel + ' →';
+      btnNext.onclick = () => switchTabByIndex(idx + 1);
+    } else {
+      btnNext.className = 'btn-next-sec btn-next-final';
+      btnNext.textContent = '✓ Ver resumen del conteo';
+      btnNext.onclick = () => { goTo('screen-resumen'); buildResumen(); };
+    }
+    container.appendChild(btnNext);
+  });
+  saveConteo(state.conteo);
+}
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]/g,'_');
+}
+
+const SECCIONES_INPUT_DIRECTO = ['carnes','abarrotes'];
+
+function createProductCard(nombre, id, seccion) {
+  const item = state.conteo[id];
+  const usaInput = SECCIONES_INPUT_DIRECTO.includes(seccion);
+  const div = document.createElement('div');
+  div.className = 'product-card';
+  div.id = `card-${id}`;
+  div.innerHTML = `
+    <div class="product-info">
+      <div class="product-name">${nombre}</div>
+      <span class="product-badge badge-hidden" id="badge-${id}"></span>
+    </div>
+    <div class="product-controls">
+      <button class="ctrl-btn ctrl-minus" onclick="cambiarCantidad('${id}',-1)">−</button>
+      ${usaInput
+        ? `<input class="ctrl-input" id="cnt-${id}" type="number" inputmode="numeric" min="0" value="${item.cantidad}" onchange="setCantidad('${id}', this.value)" onclick="this.select()">`
+        : `<span class="ctrl-count" id="cnt-${id}">${item.cantidad}</span>`
+      }
+      <button class="ctrl-btn ctrl-plus" onclick="cambiarCantidad('${id}',1)">+</button>
+      <button class="btn-urgente ${item.urgente ? 'active' : ''}" id="urg-${id}" onclick="toggleUrgente('${id}')">⚠️</button>
+    </div>`;
+  updateCardStyle(id);
+  return div;
+}
+
+function setCantidad(id, val) {
+  const nuevo = Math.max(0, parseInt(val) || 0);
+  state.conteo[id].cantidad = nuevo;
+  const el = document.getElementById(`cnt-${id}`);
+  if (el) el.value = nuevo;
+  updateCardStyle(id);
+  saveConteo(state.conteo);
+}
+
+function cambiarCantidad(id, delta) {
+  if (!state.conteo[id]) state.conteo[id] = { cantidad: 0, urgente: false };
+  const nuevo = Math.max(0, state.conteo[id].cantidad + delta);
+  state.conteo[id].cantidad = nuevo;
+  const el = document.getElementById(`cnt-${id}`);
+  if (el) { el.tagName === 'INPUT' ? el.value = nuevo : el.textContent = nuevo; }
+  updateCardStyle(id);
+  saveConteo(state.conteo);
+}
+
+function toggleUrgente(id) {
+  state.conteo[id].urgente = !state.conteo[id].urgente;
+  const btn = document.getElementById(`urg-${id}`);
+  btn.classList.toggle('active', state.conteo[id].urgente);
+  updateCardStyle(id);
+  saveConteo(state.conteo);
+}
+
+function getEstado(id) {
+  const item = state.conteo[id];
+  if (!item) return 'sin-conteo';
+  if (item.cantidad === 0 && !item.urgente) return 'sin-conteo';
+  if (item.urgente) return 'urgente';
+  if (item.cantidad < 5) return 'critico';
+  const bajo = state.esFinde ? 12 : 8;
+  if (item.cantidad <= bajo) return 'bajo';
+  return 'ok';
+}
+
+function updateCardStyle(id) {
+  const card = document.getElementById(`card-${id}`);
+  const badge = document.getElementById(`badge-${id}`);
+  if (!card) return;
+  card.className = 'product-card';
+  badge.className = 'product-badge badge-hidden';
+  badge.textContent = '';
+
+  const item = state.conteo[id];
+  if (!item) return;
+  // Show urgente even when quantity is 0
+  if (item.cantidad === 0 && !item.urgente) return;
+
+  const estado = getEstado(id);
+  if (estado === 'urgente') {
+    card.classList.add('estado-urgente');
+    badge.className = 'product-badge badge-urgente';
+    badge.textContent = '⚠️ URGENTE';
+  } else if (estado === 'critico') {
+    card.classList.add('estado-critico');
+    badge.className = 'product-badge badge-critico';
+    badge.textContent = '🔴 Crítico';
+  } else if (estado === 'bajo') {
+    card.classList.add('estado-bajo');
+    badge.className = 'product-badge badge-bajo';
+    badge.textContent = '🟡 Stock bajo';
+  } else {
+    card.classList.add('estado-ok');
+    badge.className = 'product-badge badge-ok';
+    badge.textContent = '✓ OK';
+  }
+}
+
+function switchTab(btn, secId) {
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.seccion-content').forEach(s => s.classList.remove('active'));
+  document.getElementById(secId).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// Hide empty pan section nav tab on load
+document.addEventListener('DOMContentLoaded', () => {
+  // already hidden via inline style
+});
+
+// ══════════════════════════════════
+// RESUMEN Y WHATSAPP
+// ══════════════════════════════════
+function buildResumen() {
+  const data = getAppData();
+  let urgentes = [], criticos = [], bajos = [];
+  const todosProd = {};
+
+  Object.keys(data.productos).forEach(sec => {
+    data.productos[sec].forEach(nombre => {
+      todosProd[slugify(nombre)] = nombre;
+    });
+  });
+
+  Object.keys(state.conteo).forEach(id => {
+    const item = state.conteo[id];
+    if (!item) return;
+    if (item.cantidad === 0 && !item.urgente) return;
+    const nombre = todosProd[id] || id;
+    const estado = getEstado(id);
+    if (estado === 'urgente') urgentes.push({ nombre, cantidad: item.cantidad });
+    else if (estado === 'critico') criticos.push({ nombre, cantidad: item.cantidad });
+    else if (estado === 'bajo') bajos.push({ nombre, cantidad: item.cantidad });
+  });
+
+  document.getElementById('stat-urgente').textContent = urgentes.length;
+  document.getElementById('stat-critico').textContent = criticos.length;
+  document.getElementById('stat-bajo').textContent = bajos.length;
+
+  const turnoLabel = {mañana:'AM', tarde:'PM'}[state.turno] || '';
+  const findeLabel = state.esFinde ? ' 🔥' : '';
+  const _now = new Date();
+  const _dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const _meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const fechaCompleta = `${_dias[_now.getDay()]} ${_now.getDate()} de ${_meses[_now.getMonth()]}`;
+
+  let msg = `🍽️ *CONTEO DE COCINA*\n`;
+  msg += `👤 ${state.usuario} · Turno ${turnoLabel}\n`;
+  msg += `📅 ${fechaCompleta}${findeLabel}\n\n`;
+
+  if (urgentes.length === 0 && criticos.length === 0 && bajos.length === 0) {
+    msg += `✅ Todo el inventario en orden.`;
+  } else {
+    if (urgentes.length > 0) {
+      msg += `⚠️ *URGENTE*\n`;
+      urgentes.forEach(p => msg += `• ${p.nombre}: ${p.cantidad}\n`);
+      msg += '\n';
+    }
+    if (criticos.length > 0) {
+      msg += `🔴 *CRÍTICO*\n`;
+      criticos.forEach(p => msg += `• ${p.nombre}: ${p.cantidad}\n`);
+      msg += '\n';
+    }
+    if (bajos.length > 0) {
+      msg += `🟡 *STOCK BAJO*\n`;
+      bajos.forEach(p => msg += `• ${p.nombre}: ${p.cantidad}\n`);
+      msg += '\n';
+    }
+    msg += `✅ El resto del inventario está en orden.`;
+  }
+
+  document.getElementById('preview-msg').textContent = msg;
+
+  if (urgentes.length === 0 && criticos.length === 0 && bajos.length === 0) {
+    const body = document.querySelector('.resumen-body');
+    document.getElementById('preview-msg').innerHTML = `<div class="empty-resumen"><div class="empty-icon">✅</div><p>Todo el inventario está en orden</p></div>`;
+  }
+}
+
+function enviarWhatsApp() {
+  const msg = document.getElementById('preview-msg').textContent;
+  const encoded = encodeURIComponent(msg);
+  window.open(`https://wa.me/?text=${encoded}`, '_blank');
+  // Limpiar conteo después de enviar
+  setTimeout(() => {
+    if(confirm('¿Limpiar el conteo para el próximo turno?')) {
+      state.conteo = {};
+      saveConteo({});
+      goTo('screen-welcome');
+      showToast('✅ Conteo enviado y reiniciado');
+    }
+  }, 1000);
+}
+
+// ══════════════════════════════════
+// ADMIN
+// ══════════════════════════════════
+function checkAdminPass() {
+  const input = document.getElementById('admin-pass-input').value;
+  if (input === ADMIN_PASS) {
+    document.getElementById('admin-login-view').style.display = 'none';
+    const panel = document.getElementById('admin-panel-view');
+    panel.style.display = 'flex';
+    renderAdminPanel();
+  } else {
+    showToast('❌ Contraseña incorrecta');
+    document.getElementById('admin-pass-input').value = '';
+  }
+}
+
+function renderAdminPanel() {
+  const data = getAppData();
+
+  // Usuarios
+  const ul = document.getElementById('admin-users-list');
+  ul.innerHTML = '';
+  data.usuarios.forEach(u => {
+    const row = document.createElement('div');
+    row.className = 'admin-user-row';
+    row.innerHTML = `<span>👤 ${u}</span>
+      <button class="btn-del" onclick="deleteUser('${u}')">🗑️</button>`;
+    ul.appendChild(row);
+  });
+
+  // Productos
+  const pl = document.getElementById('admin-products-list');
+  pl.innerHTML = '';
+  const secciones = { carnes:'🥩 Carnes', verduras:'🥦 Verduras', lacteos:'🧀 Lácteos', abarrotes:'🫙 Abarrotes', pan:'🍞 Pan', limpieza:'🧴 Limpieza' };
+  Object.keys(secciones).forEach(sec => {
+    const label = document.createElement('div');
+    label.className = 'admin-section-title';
+    label.style.marginTop = '12px';
+    label.textContent = secciones[sec];
+    pl.appendChild(label);
+    data.productos[sec].forEach(p => {
+      const row = document.createElement('div');
+      row.className = 'admin-product-row';
+      row.innerHTML = `<span>${p}</span>
+        <button class="btn-del" onclick="deleteProduct('${sec}','${p}')">🗑️</button>`;
+      pl.appendChild(row);
+    });
+  });
+}
+
+function addUser() {
+  const input = document.getElementById('new-user-input');
+  const nombre = input.value.trim();
+  if (!nombre) return;
+  const data = getAppData();
+  if (!data.usuarios.includes(nombre)) {
+    data.usuarios.push(nombre);
+    saveAppData(data);
+    renderAdminPanel();
+    renderUsuarios();
+    input.value = '';
+    showToast('✅ Usuario agregado');
+  }
+}
+
+function deleteUser(nombre) {
+  const data = getAppData();
+  data.usuarios = data.usuarios.filter(u => u !== nombre);
+  saveAppData(data);
+  renderAdminPanel();
+  renderUsuarios();
+  showToast('🗑️ Usuario eliminado');
+}
+
+function addProduct() {
+  const input = document.getElementById('new-product-input');
+  const sec = document.getElementById('new-product-section').value;
+  const nombre = input.value.trim();
+  if (!nombre) return;
+  const data = getAppData();
+  if (!data.productos[sec].includes(nombre)) {
+    data.productos[sec].push(nombre);
+    saveAppData(data);
+    renderAdminPanel();
+    input.value = '';
+    showToast('✅ Producto agregado');
+  }
+}
+
+function deleteProduct(sec, nombre) {
+  const data = getAppData();
+  data.productos[sec] = data.productos[sec].filter(p => p !== nombre);
+  saveAppData(data);
+  renderAdminPanel();
+  showToast('🗑️ Producto eliminado');
+}
+
+// ══════════════════════════════════
+// TOAST
+// ══════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ══════════════════════════════════
+// INIT
+// ══════════════════════════════════
+renderUsuarios();
+initContexto();
+</script>
+</body>
+</html>
