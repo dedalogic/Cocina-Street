@@ -138,6 +138,11 @@
     /* ─── SCREEN: USUARIO ─── */
     #screen-usuario {
       background: var(--blanco);
+      overflow: hidden;
+    }
+    #screen-usuario .scrollable {
+      flex: 1;
+      overflow-y: auto;
     }
 
     .screen-header {
@@ -326,7 +331,7 @@
       flex-shrink: 0;
     }
     .sticky-section-name {
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 800;
       color: white;
     }
@@ -524,6 +529,12 @@
     /* ─── SCREEN: RESUMEN ─── */
     #screen-resumen {
       background: var(--gris-claro);
+      overflow: hidden;
+    }
+    #screen-resumen .scrollable {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .resumen-header {
