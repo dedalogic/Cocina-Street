@@ -39,9 +39,9 @@
       --bajo: #FEF3C7;
       --bajo-text: #92400E;
       --bajo-dot: #F59E0B;
-      --critico: #FFE4E6;
-      --critico-text: #9F1239;
-      --critico-dot: #F43F5E;
+      --critico: #FFF0E0;
+      --critico-text: #92400E;
+      --critico-dot: #F97316;
       --urgente: #F43F5E;
 
       --radius: 16px;
@@ -1216,10 +1216,8 @@ function getEstado(id) {
   if (!item) return 'sin-conteo';
   if (item.cantidad === 0 && !item.urgente) return 'sin-conteo';
   if (item.urgente) return 'urgente';
-  if (item.cantidad < 5) return 'critico';
-  const bajo = state.esFinde ? 12 : 8;
-  if (item.cantidad <= bajo) return 'bajo';
-  return 'ok';
+  // Cualquier cantidad > 0 sin urgente = amarillo
+  return 'bajo';
 }
 
 function updateCardStyle(id) {
@@ -1238,20 +1236,12 @@ function updateCardStyle(id) {
   const estado = getEstado(id);
   if (estado === 'urgente') {
     card.classList.add('estado-urgente');
-    badge.className = 'product-badge badge-hidden';
-    badge.textContent = '';
-  } else if (estado === 'critico') {
-    card.classList.add('estado-critico');
-    badge.className = 'product-badge badge-critico';
-    badge.textContent = '🔴 Crítico';
+    badge.className = 'product-badge badge-urgente';
+    badge.textContent = '⚠️ Urgente';
   } else if (estado === 'bajo') {
     card.classList.add('estado-bajo');
     badge.className = 'product-badge badge-bajo';
     badge.textContent = '🟡 Stock bajo';
-  } else {
-    card.classList.add('estado-ok');
-    badge.className = 'product-badge badge-ok';
-    badge.textContent = '✓ OK';
   }
 }
 
