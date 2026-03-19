@@ -292,7 +292,6 @@
     /* ─── SCREEN: CONTEO ─── */
     #screen-conteo {
       background: var(--gris-claro);
-      padding-bottom: var(--nav-h);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -348,12 +347,7 @@
 
     /* NAV TABS */
     .nav-tabs {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
       width: 100%;
-      max-width: 480px;
       background: #0f2a38;
       border-top: none;
       display: flex;
@@ -361,6 +355,7 @@
       z-index: 100;
       box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
       padding: 0 4px;
+      flex-shrink: 0;
     }
 
     .nav-tab {
