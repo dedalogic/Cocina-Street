@@ -582,33 +582,47 @@
     }
 
     .resumen-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-direction: column;
       gap: 10px;
     }
 
     .stat-card {
       background: white;
-      border-radius: var(--radius-sm);
-      padding: 14px 10px;
-      text-align: center;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
       box-shadow: var(--shadow);
+      border-left: 6px solid transparent;
     }
+    .stat-card .stat-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+    .stat-card .stat-info { flex: 1; }
     .stat-card .stat-num {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 900;
+      line-height: 1;
     }
     .stat-card .stat-label {
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--gris);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
       margin-top: 2px;
     }
-    .stat-card.critico .stat-num { color: var(--critico-dot); }
-    .stat-card.bajo .stat-num { color: var(--bajo-dot); }
+    .stat-card .stat-items {
+      font-size: 13px;
+      color: var(--gris);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .stat-card.urgente { border-left-color: var(--urgente); background: #FFF5F5; }
     .stat-card.urgente .stat-num { color: var(--urgente); }
+    .stat-card.bajo { border-left-color: var(--bajo-dot); background: var(--bajo); }
+    .stat-card.bajo .stat-num { color: #92400E; }
 
     .btn-whatsapp {
       background: linear-gradient(135deg, #25D366, #128C7E);
@@ -897,16 +911,20 @@
   <div class="resumen-body scrollable">
     <div class="resumen-stats">
       <div class="stat-card urgente">
-        <div class="stat-num" id="stat-urgente">0</div>
-        <div class="stat-label">⚠️ Urgente</div>
-      </div>
-      <div class="stat-card critico">
-        <div class="stat-num" id="stat-critico">0</div>
-        <div class="stat-label">🔴 Crítico</div>
+        <div class="stat-icon">🚨</div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-urgente">0</div>
+          <div class="stat-label">Productos urgentes</div>
+          <div class="stat-items" id="stat-urgente-items"></div>
+        </div>
       </div>
       <div class="stat-card bajo">
-        <div class="stat-num" id="stat-bajo">0</div>
-        <div class="stat-label">🟡 Stock bajo</div>
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-info">
+          <div class="stat-num" id="stat-bajo">0</div>
+          <div class="stat-label">Stock bajo</div>
+          <div class="stat-items" id="stat-bajo-items"></div>
+        </div>
       </div>
     </div>
     <div class="resumen-preview">
@@ -1112,6 +1130,11 @@ const SECCION_LABELS = {
   abarrotes:'🍟 Abarrotes y Pan', limpieza:'🧴 Limpieza'
 };
 
+function scrollConteoToTop() {
+  const scrollable = document.querySelector('#screen-conteo .scrollable');
+  if (scrollable) scrollable.scrollTop = 0;
+}
+
 function switchTabByIndex(idx) {
   const key = SECCION_ORDER[idx];
   const navTabs = document.querySelectorAll('.nav-tab:not([style*="display:none"])');
@@ -1121,7 +1144,7 @@ function switchTabByIndex(idx) {
   const secId = SECCION_MAP[key];
   document.getElementById(secId).classList.add('active');
   updateStickyName(secId);
-  window.scrollTo(0, 0);
+  scrollConteoToTop();
 }
 
 function renderSecciones() {
@@ -1262,7 +1285,7 @@ function switchTab(btn, secId) {
   document.querySelectorAll('.seccion-content').forEach(s => s.classList.remove('active'));
   document.getElementById(secId).classList.add('active');
   updateStickyName(secId);
-  window.scrollTo(0, 0);
+  scrollConteoToTop();
 }
 
 // Hide empty pan section nav tab on load
@@ -1275,7 +1298,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ══════════════════════════════════
 function buildResumen() {
   const data = getAppData();
-  let urgentes = [], criticos = [], bajos = [];
+  let urgentes = [], bajos = [];
   const todosProd = {};
 
   Object.keys(data.productos).forEach(sec => {
@@ -1291,13 +1314,14 @@ function buildResumen() {
     const nombre = todosProd[id] || id;
     const estado = getEstado(id);
     if (estado === 'urgente') urgentes.push({ nombre, cantidad: item.cantidad });
-    else if (estado === 'critico') criticos.push({ nombre, cantidad: item.cantidad });
+
     else if (estado === 'bajo') bajos.push({ nombre, cantidad: item.cantidad });
   });
 
   document.getElementById('stat-urgente').textContent = urgentes.length;
-  document.getElementById('stat-critico').textContent = criticos.length;
   document.getElementById('stat-bajo').textContent = bajos.length;
+  document.getElementById('stat-urgente-items').textContent = urgentes.map(p => p.nombre).join(', ') || '';
+  document.getElementById('stat-bajo-items').textContent = bajos.map(p => p.nombre).join(', ') || '';
 
   const turnoLabel = {mañana:'AM', tarde:'PM'}[state.turno] || '';
   const findeLabel = state.esFinde ? ' 🔥' : '';
@@ -1318,11 +1342,7 @@ function buildResumen() {
       urgentes.forEach(p => msg += `• ${p.nombre}: ${p.cantidad}\n`);
       msg += '\n';
     }
-    if (criticos.length > 0) {
-      msg += `🔴 *CRÍTICO*\n`;
-      criticos.forEach(p => msg += `• ${p.nombre}: ${p.cantidad}\n`);
-      msg += '\n';
-    }
+
     if (bajos.length > 0) {
       msg += `🟡 *STOCK BAJO*\n`;
       bajos.forEach(p => msg += `• ${p.nombre}: ${p.cantidad}\n`);
