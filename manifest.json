@@ -1,0 +1,22 @@
+{
+  "name": "Cocina Street",
+  "short_name": "Cocina Street",
+  "description": "Control de inventario de cocina",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#5BC4E0",
+  "theme_color": "#5BC4E0",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
