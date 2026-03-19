@@ -1158,7 +1158,7 @@ function slugify(str) {
   return str.toLowerCase().replace(/[^a-z0-9]/g,'_');
 }
 
-const SECCIONES_INPUT_DIRECTO = ['carnes','abarrotes'];
+const SECCIONES_INPUT_DIRECTO = ['carnes','abarrotes','verduras','lacteos','pan','limpieza'];
 
 function createProductCard(nombre, id, seccion) {
   const item = state.conteo[id];
@@ -1238,8 +1238,8 @@ function updateCardStyle(id) {
   const estado = getEstado(id);
   if (estado === 'urgente') {
     card.classList.add('estado-urgente');
-    badge.className = 'product-badge badge-urgente';
-    badge.textContent = '⚠️ URGENTE';
+    badge.className = 'product-badge badge-hidden';
+    badge.textContent = '';
   } else if (estado === 'critico') {
     card.classList.add('estado-critico');
     badge.className = 'product-badge badge-critico';
