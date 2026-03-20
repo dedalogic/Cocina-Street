@@ -180,18 +180,17 @@
 </div>
 <div class="tip hidden" id="tip2">
   <div class="tipc">
-    <div class="tipe">⚠️</div>
-    <div class="tipt">Marca lo urgente</div>
-    <div class="tipb">Ingresa la cantidad que queda. Si algo necesita atención inmediata, <strong>presiona el botón ⚠️</strong> para marcarlo urgente.</div>
-    <button class="tipbtn" onclick="cTip('tip2')">Listo →</button>
+    <div class="tipe">📦</div>
+    <div class="tipt">¿Cómo hacer el conteo?</div>
+    <div class="tipb">Ingresa la cantidad que queda de cada producto. Si algo necesita atención inmediata, <strong>presiona ⚠️</strong> para marcarlo como urgente.</div>
+    <button class="tipbtn" onclick="cTip('tip2')">Empezar →</button>
   </div>
 </div>
 <div class="tip hidden" id="tip3">
   <div class="tipc">
-    <div class="tipe">👍</div>
-    <div class="tipt">¡Vas muy bien!</div>
-    <div class="tipb">Cuando termines esta sección, presiona <strong>Siguiente</strong> al final de la lista para continuar.</div>
-    <div style="font-size:26px;">↓</div>
+    <div class="tipe">🟡🔴</div>
+    <div class="tipt">¿Qué significan los colores?</div>
+    <div class="tipb"><strong style="color:#F59E0B;">Amarillo</strong> = stock bajo, hay poco pero no es urgente.<br><br><strong style="color:#F43F5E;">Rojo</strong> = marcaste ⚠️ manualmente, necesita atención inmediata.<br><br>Cuando termines, presiona <strong>Siguiente</strong> ↓ para avanzar.</div>
     <button class="tipbtn" onclick="cTip('tip3')">Entendido →</button>
   </div>
 </div>
@@ -385,7 +384,10 @@ function selT(b){document.querySelectorAll('.tbtn').forEach(x=>x.classList.remov
 function slug(s){return s.toLowerCase().replace(/[^a-z0-9]/g,'_');}
 
 function iniciar(){
-  S.c={};sC({});_i=0;renderSecs();
+  S.c={};sC({});_i=0;
+  localStorage.removeItem('tip2v');
+  localStorage.removeItem('tip3v');
+  renderSecs();
   goTo('screen-conteo');
   const fb=document.querySelector('.nbtn');
   camSec(fb,'s-'+SORD[0],SNAMES[SORD[0]]);
