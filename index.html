@@ -490,8 +490,16 @@ function buildR(){
 
 function enviarWA(){
   const msg=document.getElementById('pmsg').textContent;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
-  setTimeout(()=>{if(confirm('¿Limpiar el conteo para el próximo turno?'))reiniciar(true);},1500);
+  const enc=encodeURIComponent(msg);
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(isMobile){
+    const a=document.createElement('a');
+    a.href='whatsapp://send?text='+enc;
+    a.click();
+  } else {
+    window.open('https://web.whatsapp.com/send?text='+enc,'_blank');
+  }
+  setTimeout(()=>{if(confirm('¿Limpiar el conteo para el próximo turno?'))reiniciar(true);},2000);
 }
 function reiniciar(s=false){
   if(!s&&!confirm('¿Seguro? Se borrará el conteo actual.'))return;
